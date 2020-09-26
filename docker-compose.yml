@@ -1,0 +1,36 @@
+version: '3.7'
+services:
+  db:
+    image: mysql:5.7.31
+    container_name: mysql-container
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: Abc12345#
+    volumes:
+      - ./db/data:/var/lib/mysql
+    ports:
+      - '3307:3306'
+    restart: always
+  api:
+    image: node:10-slim
+    container_name: node-container
+    restart: always
+    working_dir: /home/node/app
+    command: npm start
+    volumes:
+      - ./api:/home/node/app
+    ports:
+      - '9001:9001'
+    depends_on:
+      - db
+  web:
+    image: 'php:7.4-apache'
+    container_name: 'php-container'
+    working_dir: /var/www/html
+    restart: always
+    volumes:
+      - ./website:/var/www/html
+    ports:
+      - '8888:80'
+    depends_on:
+      - api
