@@ -1,0 +1,12 @@
+docker build -t mysql-image -f db/Dockerfile .
+docker run -d --rm --name mysql-container mysql-image
+docker exec -i mysql-container mysql -uroot -pAbc12345# < db/script.sql
+docker exec -it mysql-container /bin/bash
+docker stop mysql-container
+docker run -d -v $(pwd)/db/data:/var/lib/mysql --rm --name mysql-container mysql-image
+docker run -d -v $(pwd)/db/data:/var/lib/mysql -p 3306:3306 --rm --name mysql-container mysql-image
+
+
+
+docker build -t node-image -f api/Dockerfile .
+docker run -d -v $(pwd)/api:/home/node/app -p 9001:9001 --rm --name node-container node-image
