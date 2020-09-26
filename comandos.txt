@@ -10,3 +10,6 @@ docker run -d -v $(pwd)/db/data:/var/lib/mysql -p 3306:3306 --rm --name mysql-co
 
 docker build -t node-image -f api/Dockerfile .
 docker run -d -v $(pwd)/api:/home/node/app -p 9001:9001 --rm --name node-container node-image
+docker run -d -v $(pwd)/api:/home/node/app -p 9001:9001 --link mysql-container --rm --name node-container node-image
+
+docker build -t php-image -f website/Dockerfile .
